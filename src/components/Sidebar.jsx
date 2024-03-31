@@ -1,8 +1,10 @@
-import { categorias } from "../data/categorias"
-
+import useCoffeShop from '../hooks/useCoffeShop'
 import Categoria from '../components/Categoria'
 
 export default function Sidebar() {
+    //provider retorna un objeto
+    const { categorias } = useCoffeShop()
+
     return (
         <aside className="md:w-72">
             <div className="p-4">

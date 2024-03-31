@@ -1,8 +1,10 @@
 /*  Props son propiedades o informacion que se pasan entre 
  componentes de React*/
+import useCoffeShop from "../hooks/useCoffeShop"
 
 export default function Categoria({categoria}) {
 
+    const {handleClickCategoria} = useCoffeShop();
     const {icono, id, nombre} = categoria;
 
     return (
@@ -14,7 +16,12 @@ export default function Categoria({categoria}) {
                 className="w-12"
             />
 
-            <p className="text-lg font-bold cursor-pointer truncate">{nombre}</p>
+            <button 
+                className="text-lg font-bold cursor-pointer truncate"
+                type="button"
+                onClick={handleClickCategoria}
+            >{nombre}
+            </button>
 
         </div>
     )

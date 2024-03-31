@@ -5,11 +5,11 @@ import useCoffeShop from "../hooks/useCoffeShop"
 export default function Inicio() {
   
   //hook (funcion)
-  const { autenticado } = useCoffeShop()
-  console.log(autenticado)
+  const { categoriaActual } = useCoffeShop()
+  
   return (
     <>  
-      <h1 className="text-4xl font-black">Menu</h1>
+      <h1 className="text-4xl font-black">Menu: {categoriaActual.nombre}</h1>
       <p className="text-2xl my-10" >
         Choose and customize your order here
       </p>
