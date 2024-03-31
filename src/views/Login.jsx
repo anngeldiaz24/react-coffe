@@ -1,3 +1,5 @@
+/* Permite que la pagina no haga una recarga completa para pasar a otra ruta*/
+import { Link } from 'react-router-dom'
 export default function Login() {
   return (
     <>
@@ -41,6 +43,12 @@ export default function Login() {
                     className="bg-indigo-600 hover:bg-indigo-800 text-white w-full mt-5 p-3 uppercase font-bold cursor-pointer"/>
             </form>
         </div>
+
+        <nav className="mt-5">
+            <Link to="/auth/registro" className="text-blue-500 hover:text-blue-700 font-bold border-b-2 border-blue-500">
+                Create a new account
+            </Link>
+        </nav>
     </>
   )
 }
