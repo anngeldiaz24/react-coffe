@@ -19,6 +19,9 @@ const CoffeProvider = ({children}) => {
     //Son productos y por lo tanto iniciara como objeto vacio en el resumen
     const [producto, setProducto] = useState({});
 
+    //Arreglo vacio
+    const [pedido, setPedido] = useState([])
+
     const handleClickCategoria = id => {
         //Nos regresará un arreglo nuevo con la categoria que se presiono
         //con [0] lo hace un objeto
@@ -35,6 +38,12 @@ const CoffeProvider = ({children}) => {
     const handleSetProducto = producto => {
         setProducto(producto)
     }
+
+    //Se elimanan los atributos de categoria_id e imagen
+    const handleAgregarPedido = ({categoria_id, imagen, ...producto}) => {
+        //Toma una copia del arreglo de pedido y agrega este producto
+        setPedido([...pedido, producto])
+    }
     
     return (
         <CoffeContext.Provider
@@ -46,7 +55,9 @@ const CoffeProvider = ({children}) => {
                 modal,
                 handleClickModal,
                 producto,
-                handleSetProducto
+                handleSetProducto,
+                pedido,
+                handleAgregarPedido
 
             }}
         >{children}</CoffeContext.Provider>

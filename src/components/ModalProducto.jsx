@@ -6,7 +6,7 @@ import { formatearDinero } from "../helpers";
 
 export default function ModalProducto() {
 
-    const { producto, handleClickModal } = useCoffeShop();
+    const { producto, handleClickModal, handleAgregarPedido } = useCoffeShop();
     const [cantidad, setCantidad] = useState(1);
 
     /* console.log(producto); */
@@ -59,7 +59,13 @@ export default function ModalProducto() {
                 </div>
 
 
-                <button type="button" className="bg-indigo-600 hover:bgindigo-800 px-5 py-2 mt-5 text-white font-bold uppercase rounded" >
+                <button type="button" 
+                        className="bg-indigo-600 hover:bgindigo-800 px-5 py-2 mt-5 text-white font-bold uppercase rounded" 
+                        /* Le pasamos un objeto para pasar producto y cantidad (... para que cantidad sea parte del objeto) */
+                        onClick={() => {
+                            handleAgregarPedido({...producto, cantidad})
+                            handleClickModal()
+                        }}>
                     Add to order
                 </button>
 
