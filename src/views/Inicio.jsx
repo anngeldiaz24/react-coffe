@@ -1,4 +1,4 @@
-import { productos } from "../data/productos"
+import { productos as data } from "../data/productos"
 import Producto from "../components/Producto"
 import useCoffeShop from "../hooks/useCoffeShop"
 
@@ -6,6 +6,11 @@ export default function Inicio() {
   
   //hook (funcion)
   const { categoriaActual } = useCoffeShop()
+
+  //Filter
+  //Creamos una variable llamada productos que filtrara de acuerdo a la categoria del producto
+  //y de acuerdo a la categoriaActual que recibe del provider, evaluara 
+  const productos = data.filter(producto => producto.categoria_id === categoriaActual.id)
   
   return (
     <>  

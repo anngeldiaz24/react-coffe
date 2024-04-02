@@ -11,10 +11,29 @@ const CoffeProvider = ({children}) => {
     //Funciones y logica que utilizaras
     //Estructura nombre del state, state
     const [categorias, setCategorias] = useState(categoriasDB);
+    //Estado inicial (Coffe)
     const [categoriaActual, setCategoriaActual] = useState(categorias[0]);
 
-    const handleClickCategoria = () => {
-        console.log('click categoria');
+    const [modal, setModal] = useState(false);
+
+    //Son productos y por lo tanto iniciara como objeto vacio en el resumen
+    const [producto, setProducto] = useState({});
+
+    const handleClickCategoria = id => {
+        //Nos regresará un arreglo nuevo con la categoria que se presiono
+        //con [0] lo hace un objeto
+        const categoria = categorias.filter(categoria => categoria.id === id)[0]
+        //Hacemos el cambio de estado
+        setCategoriaActual(categoria)
+    }
+
+    const handleClickModal = () => {
+        //Si esta en false, lo cambia a true y viceversa
+        setModal(!modal)
+    }
+
+    const handleSetProducto = producto => {
+        setProducto(producto)
     }
     
     return (
@@ -24,6 +43,10 @@ const CoffeProvider = ({children}) => {
                 categorias,
                 categoriaActual,
                 handleClickCategoria,
+                modal,
+                handleClickModal,
+                producto,
+                handleSetProducto
 
             }}
         >{children}</CoffeContext.Provider>
