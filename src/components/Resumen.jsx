@@ -1,10 +1,13 @@
+import { formatearDinero } from "../helpers";
 import useCoffeShop from "../hooks/useCoffeShop"
 import ResumenProducto from "./ResumenProducto";
 
 export default function Resumen() {
 
-  const {pedido} = useCoffeShop();
+  const {pedido, total} = useCoffeShop();
   /* console.log(pedido); */
+
+  const comprobarPedido = () => pedido.length === 0;
   
   return (
     <aside className="w-72 h-screen overflow-y-scroll p-5">
@@ -16,7 +19,7 @@ export default function Resumen() {
       </p>
       <div className="py-10">
         {pedido.length === 0 ? (
-          <p className="text-center text-2xl">There are no items yet from your order</p>
+          <p className="text-center text-2xl">No items yet</p>
         ) : (
           pedido.map(producto => (
             <ResumenProducto
@@ -27,14 +30,22 @@ export default function Resumen() {
       </div>
 
       <p className="text-xl mt-10">
-        {/* Total: {´´} */}
+        Total: {''}
+        {formatearDinero(total)}
       </p>
 
       <form className="w-full">
         <div className="mt-5">
-          <input type="submit"
-                  className="bg-indigo-600 hover:bg-indigo-800
-                  px-5 py-2 roudend uppercase font-bold text-white text-center w-full cursor-pointer"/>
+        <button 
+          type="submit"
+          className={`${comprobarPedido() ? 
+            'bg-indigo-100' : 
+            'bg-indigo-600 hover:bg-indigo-800' } 
+            px-5 py-2 rounded uppercase font-bold text-white text-center w-full cursor-pointer`}
+          disabled={comprobarPedido()}
+        >
+          Confirm order
+        </button>
         </div>
       </form>
     </aside>

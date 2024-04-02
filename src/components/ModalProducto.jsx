@@ -1,13 +1,29 @@
 //Para tener acceso al producto
 import useCoffeShop from "../hooks/useCoffeShop"
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 
 import { formatearDinero } from "../helpers";
 
 export default function ModalProducto() {
 
-    const { producto, handleClickModal, handleAgregarPedido } = useCoffeShop();
+    const { producto, handleClickModal, handleAgregarPedido, pedido } = useCoffeShop();
     const [cantidad, setCantidad] = useState(1);
+    const [edicion, setEdicion] = useState(false);
+
+    //Siempre tendra un callback()
+    //Cada que cambie el pedido, se vuelve a ejecutar
+    //Lo utilizaremos para detectar si el producto ya esta agregado en el pedido
+    useEffect(() => {
+        //Comprueba si el producto ya se encuentra en el pedido
+        if(pedido.some( pedidoState => pedidoState.id === producto.id)) {
+            const productoEdicion = pedido.filter( pedidoState => pedidoState.id === producto.id)[0]
+
+            //Recupera la cantidad del producto seleccionado
+            setCantidad(productoEdicion.cantidad)
+            setEdicion(true)
+        }
+    }, [pedido])
+    //Arreglo de dependencias
 
     /* console.log(producto); */
     return (
@@ -66,7 +82,7 @@ export default function ModalProducto() {
                             handleAgregarPedido({...producto, cantidad})
                             handleClickModal()
                         }}>
-                    Add to order
+                    {edicion ? 'Save changes' : 'Add to order'}
                 </button>
 
 

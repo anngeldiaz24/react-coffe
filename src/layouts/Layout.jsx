@@ -1,6 +1,8 @@
 //Dependencias
 import { Outlet } from 'react-router-dom'
 import Modal from 'react-modal'
+import { ToastContainer } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"
 
 //Componentes
 import Sidebar from '../components/Sidebar'
@@ -24,9 +26,9 @@ Modal.setAppElement('#root')
 
 export default function Layout() {
 
-  const { modal, handleClickModal } = useCoffeShop();
+  const { modal } = useCoffeShop();
 
-  console.log(modal)
+/*   console.log(modal) */
 
   return (
     <>
@@ -43,8 +45,8 @@ export default function Layout() {
       
       <Modal isOpen={modal} style={customStyles}>
         <ModalProducto />
-
       </Modal>
+      <ToastContainer />
     
     </>
   )

@@ -1,4 +1,5 @@
-import { createContext, useState } from "react"
+import { createContext, useState, useEffect } from "react"
+import { toast } from "react-toastify";
 import { categorias as categoriasDB } from "../data/categorias"
 
 //Ejemplo de context API
@@ -22,6 +23,15 @@ const CoffeProvider = ({children}) => {
     //Arreglo vacio
     const [pedido, setPedido] = useState([])
 
+    const [total, setTotal] = useState(0)
+
+    //Se ejecuta cada cambio
+    useEffect(() => {
+        const nuevoTotal = pedido.reduce((total, producto) => (
+            producto.precio * producto.cantidad) + total, 0)
+            setTotal(nuevoTotal)
+    }, [pedido])
+
     const handleClickCategoria = id => {
         //Nos regresará un arreglo nuevo con la categoria que se presiono
         //con [0] lo hace un objeto
@@ -32,6 +42,7 @@ const CoffeProvider = ({children}) => {
 
     const handleClickModal = () => {
         //Si esta en false, lo cambia a true y viceversa
+        //En true, se muestra el modal
         setModal(!modal)
     }
 
@@ -39,10 +50,37 @@ const CoffeProvider = ({children}) => {
         setProducto(producto)
     }
 
-    //Se elimanan los atributos de categoria_id e imagen
-    const handleAgregarPedido = ({categoria_id, imagen, ...producto}) => {
-        //Toma una copia del arreglo de pedido y agrega este producto
-        setPedido([...pedido, producto])
+    //Se eliminan los atributos de categoria_id
+    const handleAgregarPedido = ({categoria_id, ...producto}) => {
+        
+        if(pedido.some( pedidoState => pedidoState.id === producto.id)) {
+            //Map itera sobre todos los elementos  del arreglo e identificar cual es el que se modifica en cantidad
+            const pedidoActualizado = pedido.map( pedidoState => pedidoState.id === producto.id ? producto : pedidoState)
+
+            //Recupera la cantidad del producto seleccionado
+            setPedido(pedidoActualizado)
+            toast.success('Item updated successfully')
+        }else{
+            //Toma una copia del arreglo de pedido y agrega este producto
+            setPedido([...pedido, producto])
+            toast.success('Item Added successfully')
+        }
+    }
+
+    const handleEditarCantidad = id => {
+        //retorna un arreglo
+        const productoActualizar = pedido.filter(producto => producto.id === id)[0]
+        setProducto(productoActualizar)
+        setModal(!modal)
+
+    }
+
+    const handleEliminarProductoPedido = id => {
+        
+        //Eliminar el id distinto al que se manda
+        const pedidoActualizado = pedido.filter(producto => producto.id !== id)
+        setPedido(pedidoActualizado)
+        toast.success('Item deleted successfully')
     }
     
     return (
@@ -57,7 +95,10 @@ const CoffeProvider = ({children}) => {
                 producto,
                 handleSetProducto,
                 pedido,
-                handleAgregarPedido
+                handleAgregarPedido,
+                handleEditarCantidad,
+                handleEliminarProductoPedido,
+                total
 
             }}
         >{children}</CoffeContext.Provider>
