@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react"
 import { toast } from "react-toastify";
-import { categorias as categoriasDB } from "../data/categorias"
+import axios from 'axios'
 
 //Ejemplo de context API
 //Context permite comunicar de manera directa entre componentes
@@ -11,9 +11,9 @@ const CoffeProvider = ({children}) => {
     
     //Funciones y logica que utilizaras
     //Estructura nombre del state, state
-    const [categorias, setCategorias] = useState(categoriasDB);
+    const [categorias, setCategorias] = useState([]);
     //Estado inicial (Coffe)
-    const [categoriaActual, setCategoriaActual] = useState(categorias[0]);
+    const [categoriaActual, setCategoriaActual] = useState({});
 
     const [modal, setModal] = useState(false);
 
@@ -31,6 +31,22 @@ const CoffeProvider = ({children}) => {
             producto.precio * producto.cantidad) + total, 0)
             setTotal(nuevoTotal)
     }, [pedido])
+
+    //Obtenemos la información de la API de laravel
+    const getCategorias = async () => {
+        try{
+            const {data} = await axios('http://coffe-shop.test:82/api/categorias')
+            setCategorias(data.data)
+            setCategoriaActual(data.data[0])
+        } catch(error){
+            console.log(error)
+        }
+    }
+
+    //Como queremos obtener las categorias en cuanto cargue el componente
+    useEffect(() => {
+        getCategorias();
+    }, [])
 
     const handleClickCategoria = id => {
         //Nos regresará un arreglo nuevo con la categoria que se presiono
