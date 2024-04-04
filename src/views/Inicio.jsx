@@ -1,16 +1,28 @@
-import { productos as data } from "../data/productos"
+/* import { productos as data } from "../data/productos" */
+//Obtendra nuestras consultas para que sean mas eficientes y en tiempo real una vez que ya traemos toda la info de la API
+import useSWR from "swr"
 import Producto from "../components/Producto"
 import useCoffeShop from "../hooks/useCoffeShop"
+import clienteAxios from "../config/axios"
 
 export default function Inicio() {
   
   //hook (funcion)
   const { categoriaActual } = useCoffeShop()
 
+  //Consulta SWR
+  const fetcher = () => clienteAxios('/api/productos').then(data => data.data)
+  const { data, error, isLoading } = useSWR('api/productos', fetcher, {
+    refreshInterval: 1000
+  })
+
+  console.log(data)
+
   //Filter
   //Creamos una variable llamada productos que filtrara de acuerdo a la categoria del producto
   //y de acuerdo a la categoriaActual que recibe del provider, evaluara 
-  const productos = data.filter(producto => producto.categoria_id === categoriaActual.id)
+  if(isLoading) return 'Cargando...';
+  const productos = data.data.filter(producto => producto.categoria_id === categoriaActual.id)
   
   return (
     <>  

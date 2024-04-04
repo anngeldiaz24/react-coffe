@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from "react"
 import { toast } from "react-toastify";
-import axios from 'axios'
+//Libreria que permite la comunicación entre las apps
+import clienteAxios from "../config/axios";
 
 //Ejemplo de context API
 //Context permite comunicar de manera directa entre componentes
@@ -25,7 +26,7 @@ const CoffeProvider = ({children}) => {
 
     const [total, setTotal] = useState(0)
 
-    //Se ejecuta cada cambio
+    //Se ejecuta cada cambio 
     useEffect(() => {
         const nuevoTotal = pedido.reduce((total, producto) => (
             producto.precio * producto.cantidad) + total, 0)
@@ -35,7 +36,8 @@ const CoffeProvider = ({children}) => {
     //Obtenemos la información de la API de laravel
     const getCategorias = async () => {
         try{
-            const {data} = await axios('http://coffe-shop.test:82/api/categorias')
+            //Para acceder a la variable de entorno
+            const { data } = await clienteAxios('api/categorias')
             setCategorias(data.data)
             setCategoriaActual(data.data[0])
         } catch(error){
