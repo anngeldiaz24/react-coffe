@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
 import { createRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import clienteAxios from '../config/axios';
 
 export default function Registro() {
@@ -24,7 +24,7 @@ export default function Registro() {
 
         try {
             const respuesta = await clienteAxios.post('/api/registro', datos)
-            console.log(respuesta)
+            console.log('Respuesta ',respuesta)
         }catch(error) {
             console.log(error)
         }
