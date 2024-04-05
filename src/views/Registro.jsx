@@ -1,6 +1,7 @@
 import { createRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import clienteAxios from '../config/axios';
+import Alerta from '../components/Alerta';
 
 export default function Registro() {
 
@@ -9,6 +10,9 @@ export default function Registro() {
     const emailRef = createRef();
     const passwordRef = createRef();
     const passwordConfirmationRef = createRef();
+
+    //state para actualizar los errores
+    const [errores, setErrores] = useState([])
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -26,7 +30,7 @@ export default function Registro() {
             const respuesta = await clienteAxios.post('/api/registro', datos)
             console.log('Respuesta ',respuesta)
         }catch(error) {
-            console.log(error)
+            setErrores(Object.values(error.response.data.errors))
         }
     }
 
@@ -36,7 +40,11 @@ export default function Registro() {
         <p className="mt-5">Enjoy delicious meals by registering with our platform </p>
 
         <div className="bg-white shadow-md rounded-md mt-10 px-5 py-10">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}
+            noValidate>
+
+                {/* Si existen los errores, los muestra (El componente necesita un key) */}
+                { errores ? errores.map(error => <Alerta key={error}>{error}</Alerta>) : null}
                 <div className="mb-4">
                     <label 
                         className="text-slate-800"
