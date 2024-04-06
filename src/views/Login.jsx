@@ -1,8 +1,8 @@
 /* Permite que la pagina no haga una recarga completa para pasar a otra ruta*/
 import { Link } from 'react-router-dom'
 import { createRef, useState } from 'react'
-import clienteAxios from '../config/axios';
 import Alerta from '../components/Alerta';
+import { useAuth } from '../hooks/useAuth';
 
 
 export default function Login() {
@@ -14,6 +14,13 @@ export default function Login() {
     //state para actualizar los errores
     const [errores, setErrores] = useState([])
 
+    const { login } = useAuth({
+        /* Ingresa como invitado */
+        middleware: 'guest',
+        /* Reedirecionamos a la pagina principal en caso de autenticación exitosa */
+        url: '/'
+    })
+
     const handleSubmit = async e => {
         e.preventDefault();
 
@@ -22,16 +29,9 @@ export default function Login() {
             email: emailRef.current.value,
             password: passwordRef.current.value,
         }
-        console.log(datos)
-
-        try {
-            const {data} = await clienteAxios.post('/api/login', datos)
-            //Se alamcena el token 
-            localStorage.setItem('AUTH_DATA', data.token);
-            setErrores([])
-        }catch(error) {
-            setErrores(Object.values(error.response.data.errors))
-        }
+        /* console.log(datos) */
+        //Se envia la información al método login para procesarlo
+        login(datos, setErrores)
     }
 
   return (

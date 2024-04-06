@@ -1,9 +1,11 @@
 import useCoffeShop from '../hooks/useCoffeShop'
 import Categoria from '../components/Categoria'
+import { useAuth } from '../hooks/useAuth'
 
 export default function Sidebar() {
     //provider retorna un objeto
     const { categorias } = useCoffeShop()
+    const {logout} = useAuth({middleware: 'auth'})
 
     return (
         <aside className="md:w-72">
@@ -29,6 +31,7 @@ export default function Sidebar() {
                     <button
                         type="button"
                         className="text-center bg-red-500 w-full p-3 font-bold text-white truncate"
+                        onClick={logout}
                         >Cancel order
                     </button>
             </div>
