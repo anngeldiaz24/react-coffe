@@ -22,9 +22,17 @@ export const useAuth = ({ middleware, url }) => {
     };
 
     // Función para realizar el registro (signup)
-    const registro = () => {
-        // Implementar la lógica de registro según tus necesidades
-    };
+    const registro = async (datos, setErrores) => {
+        try {
+            const { data } = await clienteAxios.post('/api/registro', datos)
+            localStorage.setItem('AUTH_DATA', data.token);
+            setErrores([]);
+            await mutate()
+        } catch (error) {
+            setErrores(Object.values(error.response.data.errors))
+        }
+    }
+
 
     // Función para cerrar sesión (logout)
     const logout = async () => {
@@ -35,10 +43,10 @@ export const useAuth = ({ middleware, url }) => {
             }
         })
         //Quitamos el token de la bd
-        localStorage.removeItem('AUTH_TOKEN')
+        localStorage.removeItem('AUTH_DATA')
         await mutate(undefined)
       } catch (error) {
-        throw new Error(error?.response?.data?.message || 'Failed to fetch user data');
+        throw new Error(error?.response?.data?.message);
       }
     };
 
@@ -51,13 +59,9 @@ export const useAuth = ({ middleware, url }) => {
         })
         .then(res => res.data)
         .catch(error => {
-            throw new Error(error?.response?.data?.message || 'Failed to fetch user data');
+            throw new Error(error?.response?.data?.message);
         })
     );
-
-    // Imprimir en consola el usuario y errores para depuración
-    console.log(user);
-    console.log(error);
 
     //para ejecutar una función condicional cuando ciertas dependencias cambian
     useEffect(() => {

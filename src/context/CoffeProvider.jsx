@@ -100,6 +100,41 @@ const CoffeProvider = ({children}) => {
         setPedido(pedidoActualizado)
         toast.success('Item deleted successfully')
     }
+
+    const handleSubmitNuevaOrden = async () => {
+
+        //Es necesario estar loggeado
+        const token = localStorage.getItem('AUTH_DATA');
+
+        try {
+            const {data} = await clienteAxios.post('/api/pedidos', 
+            {
+                //Se envia el total al metodo store
+                total,
+                //renombramos productos por pedido y retorna en productos un arreglo nuevo
+                productos: pedido.map(producto => {
+                    return {
+                        id: producto.id,
+                        cantidad: producto.cantidad
+                    }
+                })
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}` 
+                }
+
+            })
+            //Lo retorna del metodo de store
+            toast.success(data.message)
+            setTimeout(() => {
+                setPedido([])
+            }, 1000)
+        } catch (error) {
+            console.log(error)
+            
+        }
+    }
     
     return (
         <CoffeContext.Provider
@@ -116,7 +151,8 @@ const CoffeProvider = ({children}) => {
                 handleAgregarPedido,
                 handleEditarCantidad,
                 handleEliminarProductoPedido,
-                total
+                total,
+                handleSubmitNuevaOrden
 
             }}
         >{children}</CoffeContext.Provider>

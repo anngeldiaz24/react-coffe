@@ -1,7 +1,7 @@
 import { createRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import clienteAxios from '../config/axios';
 import Alerta from '../components/Alerta';
+import { useAuth } from '../hooks/useAuth';
 
 export default function Registro() {
 
@@ -13,6 +13,8 @@ export default function Registro() {
 
     //state para actualizar los errores
     const [errores, setErrores] = useState([])
+    //Middleware
+    const { registro } = useAuth({middleware: 'guest', url: '/'})
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -24,15 +26,8 @@ export default function Registro() {
             password: passwordRef.current.value,
             password_confirmation: passwordConfirmationRef.current.value,   
         }
-        console.log(datos)
-
-        try {
-            const {data} = await clienteAxios.post('/api/registro', datos)
-            //Se imprime el token de la API de laravel
-            console.log(data.token)
-        }catch(error) {
-            setErrores(Object.values(error.response.data.errors))
-        }
+        /* console.log(datos) */
+        registro(datos, setErrores)
     }
 
   return (

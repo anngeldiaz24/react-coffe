@@ -5,7 +5,7 @@ import { useAuth } from '../hooks/useAuth'
 export default function Sidebar() {
     //provider retorna un objeto
     const { categorias } = useCoffeShop()
-    const {logout} = useAuth({middleware: 'auth'})
+    const {logout, user } = useAuth({middleware: 'auth'})
 
     return (
         <aside className="md:w-72">
@@ -15,6 +15,8 @@ export default function Sidebar() {
                     alt="Logo"
                 />
             </div>
+
+            <p className='my-10 text-xl text-center'>Hello: {user?.name}</p>
 
             <div className="mt-10">
                 {/* map Itera y genera un arreglo por cada elemento */}
