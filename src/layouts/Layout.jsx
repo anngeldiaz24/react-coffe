@@ -30,9 +30,6 @@ export default function Layout() {
   const {user, error} = useAuth({middleware: 'auth'})
   const { modal } = useCoffeShop();
 
-  console.log(user)
-  console.log(error)
-
   return (
     <>
       <div className='md:flex'>

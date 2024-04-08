@@ -30,12 +30,12 @@ export default function Sidebar() {
             </div>
 
             <div className="my-5 px-5">
-                    <button
-                        type="button"
-                        className="text-center bg-red-500 w-full p-3 font-bold text-white truncate"
-                        onClick={logout}
-                        >Cancel order
-                    </button>
+                <button
+                    type="button"
+                    className="text-center bg-red-500 w-full p-3 font-bold text-white truncate rounded"
+                    onClick={logout}
+                    >Cancel order
+                </button>
             </div>
         </aside>
     )
